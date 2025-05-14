@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Final</title>
+</head>
+<body>
+    <div>
+        <h1>Benvingut al Quiz Final!</h1>
+    </div>
+    <div>
+        <label for="nomUsuari">Introdueix el teu nom</label>
+        <input type="text" id="nomUsuari">
+        <button onclick="guardarNom()">Clic</button>
+    </div>
+
+    <script>
+        function guardarNom() {
+            const nom = document.getElementById('nomUsuari').value;
+            if (nom.trim() !== '') {
+                localStorage.setItem('nomUsuari', nom);
+                location.href = 'quiz.html';
+            } else {
+                alert("Si us plau, escriu el teu nom.");
+            }
+        }
+    </script>
+</body>
+</html>
