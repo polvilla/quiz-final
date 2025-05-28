@@ -4,15 +4,166 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1, h2 {
+            color: #2f4a25;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .resultat {
+            font-weight: bold;
+            color: green;
+        }
+        .incorrecte {
+            color: red;
+        }
+    </style>
 </head>
 <body>
     <div>
         <h1>Hola, <span id="mostrarNom"></span>! Comencem el quiz!</h1>
     </div>
 
+    <form id="quizForm"></form>
+
+    <button onclick="corregir()">Comprova les respostes</button>
+    <p id="resultat"></p>
+
     <script>
         const nom = localStorage.getItem('nomUsuari');
         document.getElementById('mostrarNom').textContent = nom ? nom : 'usuari';
+
+        const preguntes = [
+            {
+                q: "Quin any es va produir la Batalla de Covadonga?",
+                opcions: ["622", "711", "718", "732"],
+                correcta: 2
+            },
+            {
+                q: "Qui va ser el primer rei de la dinastia Borbó a Espanya?",
+                opcions: ["Ferran VI", "Carles III", "Felip V", "Alfons XII"],
+                correcta: 2
+            },
+            {
+                q: "Quina civilització antiga va fundar la ciutat de Cadis?",
+                opcions: ["Grecs", "Ibers", "Cartaginesos", "Fenicis"],
+                correcta: 3
+            },
+            {
+                q: "En quin any va començar la Guerra Civil Espanyola?",
+                opcions: ["1931", "1936", "1939", "1942"],
+                correcta: 1
+            },
+            {
+                q: "Qui era el president del govern espanyol durant el 23-F de 1981?",
+                opcions: ["Adolfo Suárez", "Leopoldo Calvo-Sotelo", "Felipe González", "Santiago Carrillo"],
+                correcta: 1
+            },
+            {
+                q: "Quina és la data tradicional de la descoberta d'Amèrica?",
+                opcions: ["1500", "1492", "1485", "1512"],
+                correcta: 1
+            },
+            {
+                q: "Qui va redactar la Constitució espanyola de 1812?",
+                opcions: ["Els liberals de Cadis", "Les Corts de Madrid", "El Consell d’Estat", "La Junta Central"],
+                correcta: 0
+            },
+            {
+                q: "Quina guerra va provocar la independència de les colònies americanes?",
+                opcions: ["Guerra dels Segadors", "Guerra del Francès", "Guerra de Successió", "Guerra Carlista"],
+                correcta: 1
+            },
+            {
+                q: "Quan es va aprovar l’actual Constitució Espanyola?",
+                opcions: ["1975", "1976", "1978", "1981"],
+                correcta: 2
+            },
+            {
+                q: "Quin poble preromà es va enfrontar als romans?",
+                opcions: ["Tartessos", "Visigots", "Ibers", "Lusitans"],
+                correcta: 3
+            },
+            {
+                q: "Qui va ser l’últim rei visigot?",
+                opcions: ["Recared", "Lleovigild", "Roderic", "Ataülf"],
+                correcta: 2
+            },
+            {
+                q: "Any de la Revolució Gloriosa que va destronar Isabel II?",
+                opcions: ["1868", "1848", "1873", "1898"],
+                correcta: 0
+            },
+            {
+                q: "Quin rei va instaurar el Decret de Nova Planta?",
+                opcions: ["Carles II", "Felip V", "Ferran VII", "Alfons XIII"],
+                correcta: 1
+            },
+            {
+                q: "Qui era el dictador entre 1939 i 1975?",
+                opcions: ["Primo de Rivera", "Francisco Franco", "Alfonso XIII", "Manuel Azaña"],
+                correcta: 1
+            },
+            {
+                q: "Resultat de la Batalla de Lepant?",
+                opcions: ["Derrota", "Victòria contra els otomans", "Pèrdua de Sicília", "Aliança amb França"],
+                correcta: 1
+            },
+            {
+                q: "Líder inicial de la Segona República el 1931?",
+                opcions: ["Manuel Azaña", "Niceto Alcalá-Zamora", "Indalecio Prieto", "Largo Caballero"],
+                correcta: 1
+            },
+            {
+                q: "Quan va començar el franquisme?",
+                opcions: ["1936", "1939", "1945", "1959"],
+                correcta: 1
+            },
+            {
+                q: "Any d’abdicació del rei Joan Carles I?",
+                opcions: ["2008", "2011", "2014", "2019"],
+                correcta: 2
+            },
+            {
+                q: "Què es va signar el 1492 a més de la descoberta d’Amèrica?",
+                opcions: ["Tractat d’Utrecht", "Expulsió dels jueus", "Tractat de Tordesillas", "Capitulacions de Santa Fe"],
+                correcta: 1
+            },
+            {
+                q: "Qui va guanyar les eleccions de 1977?",
+                opcions: ["PSOE", "PCE", "UCD", "AP"],
+                correcta: 2
+            }
+        ];
+
+        const form = document.getElementById("quizForm");
+        preguntes.forEach((pregunta, index) => {
+            const div = document.createElement("div");
+            div.className = "question";
+            div.innerHTML = `<h3>${index + 1}. ${pregunta.q}</h3>` +
+                pregunta.opcions.map((opcio, i) => `
+                    <label><input type="radio" name="pregunta${index}" value="${i}"> ${opcio}</label><br>`).join("");
+            form.appendChild(div);
+        });
+
+        function corregir() {
+            let correctes = 0;
+            preguntes.forEach((pregunta, index) => {
+                const seleccionada = document.querySelector(`input[name='pregunta${index}']:checked`);
+                if (seleccionada && parseInt(seleccionada.value) === pregunta.correcta) {
+                    correctes++;
+                }
+            });
+            document.getElementById("resultat").textContent = `Has encertat ${correctes} de ${preguntes.length} preguntes.`;
+        }
     </script>
 </body>
 </html>
